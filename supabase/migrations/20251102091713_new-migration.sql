@@ -16,6 +16,7 @@ $$ LANGUAGE plpgsql;
 CREATE TABLE merchants (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   payout_wallet_address TEXT CHECK (payout_wallet_address ~ '^0x[a-fA-F0-9]{40}$'),
+  is_payout_wallet_verified BOOLEAN DEFAULT FALSE,
   webhook_url TEXT CHECK (webhook_url ~ '^https://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:/.*)?$'),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

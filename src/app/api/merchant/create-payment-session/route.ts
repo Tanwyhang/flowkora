@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createApiRouteClient } from '../../../../lib/supabase/api';
 import { z } from 'zod';
 
 // Zod schema for input validation
@@ -13,7 +12,7 @@ const createPaymentSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createApiRouteClient();
 
   try {
     // 1. Get the authenticated user
@@ -33,6 +32,18 @@ export async function POST(request: Request) {
 
     const { amount, currency, orderId, customerEmail, callbackUrl } = validation.data;
 
+    // Fetch merchant's payout wallet address
+    const { data: merchantProfile, error: profileError } = await supabase
+      .from('merchants')
+      .select('payout_wallet_address')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError || !merchantProfile?.payout_wallet_address) {
+      console.error('Supabase Profile Error:', profileError);
+      return NextResponse.json({ error: 'Merchant payout wallet address not configured.' }, { status: 400 });
+    }
+
     // 3. Create the transaction record in the database
     const { data: transaction, error: insertError } = await supabase
       .from('transactions')
@@ -44,6 +55,7 @@ export async function POST(request: Request) {
         customer_email: customerEmail,
         callback_url: callbackUrl,
         status: 'pending',
+        merchant_payout_wallet_address: merchantProfile.payout_wallet_address,
       })
       .select('id')
       .single();

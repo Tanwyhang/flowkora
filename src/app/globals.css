@@ -9,7 +9,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-variation-settings: "slnt" 0;
@@ -17,7 +16,7 @@
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-neutral-200;
+    @apply bg-zinc-950 text-neutral-200 font-mono;
   }
   :root {
     --background: 0 0% 100%;
@@ -72,9 +71,23 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+  .theme {
+    --animate-spin: spin 2s linear infinite;
+  }
 }
 
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 0.5rem));
+  }
+}
 
+.animate-scroll {
+  animation: scroll var(--animation-duration, 40s) linear infinite;
+}
 
 @layer base {
   * {

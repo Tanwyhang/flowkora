@@ -33,7 +33,8 @@ Stores profile information for merchants, extending the `auth.users` table.
 | Column                | Type        | Constraints                                     | Description                                                                 |
 | --------------------- | ----------- | ----------------------------------------------- | --------------------------------------------------------------------------- |
 | `id`                  | `UUID`      | **Primary Key**, Foreign Key to `auth.users.id` | Links directly to the Supabase authentication user.                         |
-| `payout_wallet_address` | `TEXT`      | CHECK (valid Ethereum address format)           | The merchant's on-chain wallet address for receiving payments.              |
+| `payout_wallet_address` | `TEXT`      | CHECK (valid Ethereum address format)           | The merchant\'s on-chain wallet address for receiving payments.              |
+| `is_payout_wallet_verified` | `BOOLEAN`   | `DEFAULT FALSE`                                 | Indicates if the payout wallet address has been cryptographically verified. |
 | `webhook_url`         | `TEXT`      | CHECK (valid HTTPS URL format)                  | The secure endpoint for sending payment status webhooks to the merchant.    |
 | `created_at`          | `TIMESTAMPTZ` | `DEFAULT NOW()`                                 | Timestamp of when the merchant record was created.                          |
 | `updated_at`          | `TIMESTAMPTZ` | `DEFAULT NOW()`                                 | Timestamp of the last update (automatically managed by a trigger).          |
