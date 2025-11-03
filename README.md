@@ -6,7 +6,7 @@ FlowKora is a decentralized payment gateway for merchants and users to transact 
 
 ## Project Documentation
 
-*   [GEMINI.md](../GEMINI.md) - The single source of truth for FlowKora project details.
+*   [GEMINI.md](./GEMINI.md) - The single source of truth for FlowKora project details.
 *   [API Documentation](./docs/api.md) - Details on FlowKora's API endpoints.
 *   [Schema Documentation](./docs/schema.md) - Information on database schemas.
 
