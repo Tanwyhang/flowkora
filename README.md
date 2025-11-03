@@ -2,7 +2,7 @@
 
 FlowKora is a decentralized payment gateway for merchants and users to transact with stablecoins on Arbitrum One. It provides a simple and secure way to accept crypto payments.
 
-**For a comprehensive overview of the project, including core objectives, implementation plan, system architecture, and tech stack, please refer to the main project documentation: [GEMINI.md](../GEMINI.md)**
+**For a comprehensive overview of the project, including core objectives, implementation plan, system architecture, and tech stack, please refer to the main project documentation: [GEMINI.md](./GEMINI.md)**
 
 ## Project Documentation
 
