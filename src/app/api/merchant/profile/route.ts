@@ -10,10 +10,11 @@ const updateProfileSchema = z.object({
 
 // GET handler to fetch merchant profile
 export async function GET(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in profile/GET", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data, error } = await supabase
@@ -35,10 +36,11 @@ export async function GET(request: Request) {
 
 // PUT handler to update merchant profile
 export async function PUT(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in profile/PUT", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();

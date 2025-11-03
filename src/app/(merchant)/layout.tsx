@@ -9,12 +9,12 @@ import { cookies } from 'next/headers';
 export default async function MerchantLayout({children}: { children: React.ReactNode; }) {
 
 
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createClient();
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user } } = await supabase.auth.getUser();
+  console.log("DEBUG: User in layout.tsx", user);
 
-  if (!session) {
+  if (!user) {
     redirect('/login');
   }
 

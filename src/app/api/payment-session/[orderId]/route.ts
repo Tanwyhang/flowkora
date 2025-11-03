@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createApiRouteClient } from '@/lib/supabase/api';
 
-export async function GET(request: Request, { params }: { params: { orderId: string } }) {
-  const supabase = createApiRouteClient();
-  const { orderId } = params;
+export async function GET(request: Request, context: any) {
+  const supabase = await createApiRouteClient();
+  const { orderId } = context.params;
 
   try {
     // Fetch payment session details from the database
@@ -12,6 +12,7 @@ export async function GET(request: Request, { params }: { params: { orderId: str
       .select('amount, currency, merchant_order_id, customer_email, callback_url, id, merchant_payout_wallet_address')
       .eq('id', orderId)
       .single();
+    console.log("DEBUG: Payment session data in payment-session/[orderId]/GET", paymentSession);
 
     if (error || !paymentSession) {
       console.error('Error fetching payment session:', error);

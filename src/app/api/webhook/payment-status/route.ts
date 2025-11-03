@@ -24,7 +24,9 @@ export async function POST(request: Request) {
 
     // 1. Parse and validate the request body
     const body = await request.json();
+    console.log("DEBUG: Webhook request body", body);
     const validation = webhookSchema.safeParse(body);
+    console.log("DEBUG: Webhook validation data", validation.data);
 
     if (!validation.success) {
       return NextResponse.json({ error: 'Invalid input', details: validation.error.flatten() }, { status: 400 });

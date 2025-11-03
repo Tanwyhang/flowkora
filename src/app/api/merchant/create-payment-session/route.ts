@@ -12,11 +12,12 @@ const createPaymentSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     // 1. Get the authenticated user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+    console.log("DEBUG: User in create-payment-session", user);
 
     if (userError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     // 2. Parse and validate the request body
     const body = await request.json();
     const validation = createPaymentSchema.safeParse(body);
+    console.log("DEBUG: Validation data in create-payment-session", validation.data);
 
     if (!validation.success) {
       return NextResponse.json({ error: 'Invalid input', details: validation.error.flatten() }, { status: 400 });
@@ -38,6 +40,7 @@ export async function POST(request: Request) {
       .select('payout_wallet_address')
       .eq('id', user.id)
       .single();
+    console.log("DEBUG: Merchant profile in create-payment-session", merchantProfile);
 
     if (profileError || !merchantProfile?.payout_wallet_address) {
       console.error('Supabase Profile Error:', profileError);
@@ -59,6 +62,7 @@ export async function POST(request: Request) {
       })
       .select('id')
       .single();
+    console.log("DEBUG: Transaction data in create-payment-session", transaction);
 
     if (insertError) {
       // Handle potential duplicate order ID for the same merchant

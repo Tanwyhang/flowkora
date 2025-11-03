@@ -8,10 +8,11 @@ const createApiKeySchema = z.object({
 });
 
 export async function GET(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in api-keys/GET", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { data: apiKeys, error } = await supabase
@@ -32,10 +33,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in api-keys/POST", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();

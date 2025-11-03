@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 import { createApiRouteClient } from '@/lib/supabase/api';
 import { z } from 'zod';
@@ -8,12 +8,13 @@ const updateApiKeySchema = z.object({
   status: z.enum(['active', 'revoked']).optional(),
 });
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const supabase = createApiRouteClient();
-  const { id } = params;
+export async function PUT(request: NextRequest) {
+  const supabase = await createApiRouteClient();
+  const id = request.nextUrl.pathname.split('/').pop();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in api-keys/[id]/PUT", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();
@@ -40,12 +41,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  const supabase = createApiRouteClient();
-  const { id } = params;
+export async function DELETE(request: NextRequest) {
+  const supabase = await createApiRouteClient();
+  const id = request.nextUrl.pathname.split('/').pop();
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    console.log("DEBUG: User in api-keys/[id]/DELETE", user);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { error } = await supabase

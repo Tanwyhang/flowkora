@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Spinner from '@/components/ui/spinner';
 import {
   Table,
   TableBody,
@@ -51,7 +52,11 @@ export default function DashboardPage() {
   }, []);
 
   if (loading) {
-    return <div>Loading transactions...</div>;
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Spinner size="large" />
+      </div>
+    );
   }
 
   if (error) {

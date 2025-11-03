@@ -16,8 +16,20 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner'; // Changed import
-import { ConnectWallet, useAddress, useSigner } from '@thirdweb-dev/react';
+import { ConnectButton } from 'thirdweb/react';
+import { useAddress, useSigner } from '@thirdweb-dev/react';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import Spinner from '@/components/ui/spinner';
+import { client } from '@/lib/thirdwebClient'; // Import the client from lib/thirdwebClient.ts
+import { inAppWallet, createWallet } from 'thirdweb/wallets';
+import { arbitrum } from "thirdweb/chains";
+
+const wallets = [
+  inAppWallet(),
+  createWallet("io.metamask"),
+  createWallet("com.coinbase.wallet"),
+  createWallet("walletConnect"),
+];
 
 // Schema for form validation, matching the API's validation
 const profileFormSchema = z.object({
@@ -163,7 +175,7 @@ export default function SettingsPage() {
                   </FormControl>
                   <FormMessage />
                   <div className="mt-2">
-                    <ConnectWallet theme="light" btnTitle="Connect Wallet for Payout" />
+                    <ConnectButton theme="light" client={client} wallets={wallets} chain={arbitrum} />
                     {connectedAddress && (
                       <p className="text-sm text-muted-foreground mt-2">
                         Connected: {connectedAddress}
@@ -174,7 +186,7 @@ export default function SettingsPage() {
                     )}
                     {canVerify && (
                       <Button type="button" onClick={handleVerifyWallet} disabled={isVerifying} className="mt-2">
-                        {isVerifying ? 'Verifying...' : 'Verify Wallet Ownership'}
+                        {isVerifying ? (<><Spinner size="small" /> Verifying...</>) : 'Verify Wallet Ownership'}
                       </Button>
                     )}
                     {isVerified && currentPayoutAddress && connectedAddress?.toLowerCase() === currentPayoutAddress?.toLowerCase() && (
@@ -200,7 +212,7 @@ export default function SettingsPage() {
               )}
             />
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
+              {form.formState.isSubmitting ? (<><Spinner size="small" /> Saving...</>) : 'Save Changes'}
             </Button>
           </form>
         </Form>

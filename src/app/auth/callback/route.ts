@@ -7,9 +7,10 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
 
   if (code) {
-    const cookieStore = cookies();
-    const supabase = await createClient(cookieStore);
-    await supabase.auth.exchangeCodeForSession(code);
+    console.log("DEBUG: Code received in callback", code);
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    console.log("DEBUG: Session exchange result", data, error);
   }
 
   // URL to redirect to after sign in process completes

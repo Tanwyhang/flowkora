@@ -2,11 +2,14 @@
 
 import { BackgroundBeams } from "@/components/ui/shadcn-io/background-beams";
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion'; // Assuming motion/react is framer-motion
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { InfiniteMovingCards } from '@/components/ui/infinite-moving-cards';
+// import { InfiniteMovingCards } from '@/components/ui/infinite-moving-cards';
 import { LayoutTextFlip } from '@/components/ui/layout-text-flip';
+import { useEffect, useState } from 'react';
+import Spinner from '@/components/ui/spinner';
 
+/*
 const testimonials = [
   {
     quote:
@@ -38,14 +41,18 @@ const testimonials = [
     title: "Innovation Policy Expert",
   },
 ];
+*/
 
 export default function LandingPage() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMerchantLoading, setIsMerchantLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(false);
 
   return (
     
-    <div className="relative mx-auto flex w-full flex-col items-center justify-center overflow-hidden bg-gray-100 p-4">
-      <BackgroundBeams className="absolute inset-0" />
+    <div className="relative mx-auto flex w-full flex-col items-center justify-center overflow-hidden bg-white p-4" style={{ height: '100vh' }}>
+      {/* <BackgroundBeams className="absolute inset-0" /> */}
       <div className="relative z-10 flex w-full flex-col items-center justify-center space-y-6 px-8 py-16 text-center">
         <div className="px-4 py-10 md:py-20">
           <h1 className="relative z-10 mx-auto max-w-4xl text-center text-2xl font-bold text-slate-700 md:text-4xl lg:text-7xl dark:text-slate-300">
@@ -83,27 +90,43 @@ export default function LandingPage() {
             className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4"
           >
             <Button
-              onClick={() => router.push('/login')}
+              onClick={() => {
+                setIsMerchantLoading(true);
+                router.push('/login');
+              }}
+              disabled={isMerchantLoading}
               className="w-60 transform rounded-lg bg-black px-6 py-2 font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
             >
-              I'm a Merchant
+              {isMerchantLoading ? (
+                <><Spinner size="small" /> Loading...</>
+              ) : (
+                "I'm a Merchant"
+              )}
             </Button>
             <Button
-              onClick={() => router.push('/user-portal')}
+              onClick={() => {
+                setIsUserLoading(true);
+                router.push('/user-portal');
+              }}
+              disabled={isUserLoading}
               variant="outline"
               className="w-60 transform rounded-lg border border-gray-300 bg-white px-6 py-2 font-medium text-black transition-all duration-300 hover:-translate-y-0.5 hover:bg-gray-100 dark:border-gray-700 dark:bg-black dark:text-white dark:hover:bg-gray-900"
             >
-              I'm a User
+              {isUserLoading ? (
+                <><Spinner size="small" /> Loading...</>
+              ) : (
+                "I'm a User"
+              )}
             </Button>
           </motion.div>
         </div>
-        <div className="relative z-10 flex h-[20rem] flex-col items-center justify-center overflow-hidden rounded-md antialiased">
+        {/* <div className="relative z-10 flex h-[20rem] flex-col items-center justify-center overflow-hidden rounded-md antialiased">
           <InfiniteMovingCards  
             items={testimonials}
             direction="right"
             speed="slow"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -12,11 +12,12 @@ const verifyWalletSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     // 1. Get the authenticated user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+    console.log("DEBUG: User in verify-payout-wallet", user);
 
     if (userError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     // 2. Parse and validate the request body
     const body = await request.json();
     const validation = verifyWalletSchema.safeParse(body);
+    console.log("DEBUG: Validation data in verify-payout-wallet", validation.data);
 
     if (!validation.success) {
       return NextResponse.json({ error: 'Invalid input', details: validation.error.flatten() }, { status: 400 });

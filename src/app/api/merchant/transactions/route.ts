@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 import { createApiRouteClient } from '../../../../lib/supabase/api';
 
 export async function GET(request: Request) {
-  const supabase = createApiRouteClient();
+  const supabase = await createApiRouteClient();
 
   try {
     // 1. Get the authenticated user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+    console.log("DEBUG: User in transactions/GET", user);
 
     if (userError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
